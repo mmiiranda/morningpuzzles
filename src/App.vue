@@ -1,14 +1,17 @@
 <template>
   <div id="app">
       <div class="container">
-        <div class="logo">
-          <h1>MoringPuzzle</h1>
-        </div>
-       
-        <matrixContent />
-        <div class="buttons-content">
-          <inputButton name="Submeter" />
-        </div>
+        <form>
+          <div class="logo">
+            <h1>MoringPuzzle</h1>
+          </div>
+        
+          <matrixContent />
+
+          <div class="buttons-content">
+            <inputButton name="Submeter" />
+          </div>
+        </form>
       </div>
       <timerContent id="timer" />
   </div>
@@ -17,7 +20,7 @@
 <script>
   import  inputButton  from "./components/input/button.vue";
   import  timerContent  from "./components/timer.vue";
-  import matrixContent from "./components/matrix.vue";
+  import matrixContent from "./components/miniMatrix.vue";
 
   export default {
       name: "App",
@@ -59,12 +62,19 @@
     display: flex;
     flex-direction: column;
 
-    justify-content: space-around;
-    align-items: center;
-
     height: 100%;
 
     padding: 1rem 0;
+  }
+
+  .container form{
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    
+    justify-content: space-around;
+    align-items: center ;
   }
 
   .button-content{
