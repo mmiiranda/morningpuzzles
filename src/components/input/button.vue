@@ -19,7 +19,7 @@ button{
     color: var(--btn-tx-color);
 
     border: none;
-
+    border-radius: .5rem;
 
     padding: .2rem .5rem;
     font-size: 1.35rem;
