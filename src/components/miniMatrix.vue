@@ -3,8 +3,8 @@
         <div v-for="(row, rowIndex) in test" :key="rowIndex" class="matrix-row">
             <div v-for="(element, columnIndex) in row" :key="columnIndex" class="matrix-element">
                 <div v-if="element == 0">
-                    <input type="text"  @keypress="validKey(rowIndex, columnIndex,$event)" :id="`input-matrix-${rowIndex}-${columnIndex}`" on-paste="() => return false">
-                    <div :id="`matrix-${rowIndex}-${columnIndex}`"></div>
+                    <input type="text"  @keypress="validKey(rowIndex, columnIndex,$event)" :id="`input-matrix-${rowIndex}-${columnIndex}`">
+                    <div :id="`matrix-${rowIndex}-${columnIndex}`" hidden>0</div>
                 </div>
                 <div v-else :id="`matrix-${rowIndex}-${columnIndex }`" class="unchanged">
                     {{ element }}
@@ -37,13 +37,13 @@
             validKey(rowIndex, columnIndex ,event){
                 let tecla = event.key;
                 
-                document.querySelector(`input#input-matrix-${rowIndex}-${columnIndex}`).value = ""
+                document.querySelector(`input#input-matrix-${rowIndex}-${columnIndex}`).value = "";
 
                 if ((isNaN(tecla) || tecla < '1' || tecla > '9')) {
                     event.preventDefault();
-                 }
-
-            
+                }else{
+                    document.querySelector(`#matrix-${rowIndex}-${columnIndex}`).innerHTML = "tecla"
+                }
             }
         },
         mounted(){
@@ -111,5 +111,6 @@
 
 .matrix-element .unchanged{
     background-color: #c1c1c1;
+    cursor: context-menu;
 }
 </style>
