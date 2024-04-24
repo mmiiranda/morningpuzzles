@@ -1,12 +1,12 @@
 <template>
   <div id="app">
       <div class="container">
-        <form>
+        <form @submit="submitMatrix">
           <div class="logo">
             <h1>MoringPuzzle</h1>
           </div>
         
-          <matrixContent />
+          <matrixContent ref="matrixRef"/>
 
           <div class="buttons-content">
             <inputButton name="Submeter" />
@@ -28,6 +28,16 @@
         inputButton,
         timerContent,
         matrixContent
+      },
+      methods:{
+          submitMatrix(event){
+            event.preventDefault();
+            try{
+              console.log(this.$refs.matrixRef.getMatrix());
+            }catch(error){
+              alert(`${error.message}`)
+            }
+          }
       }
   }
 </script>

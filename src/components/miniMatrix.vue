@@ -4,9 +4,9 @@
             <div v-for="(element, columnIndex) in row" :key="columnIndex" class="matrix-element">
                 <div v-if="element == 0">
                     <input type="text"  @keypress="validKey(rowIndex, columnIndex,$event)" :id="`input-matrix-${rowIndex}-${columnIndex}`">
-                    <div :id="`matrix-${rowIndex}-${columnIndex}`" hidden>0</div>
+                    <div :id="`matrix-${rowIndex}-${columnIndex}`" class="matrix-cell" hidden >0</div>
                 </div>
-                <div v-else :id="`matrix-${rowIndex}-${columnIndex }`" class="unchanged">
+                <div v-else :id="`matrix-${rowIndex}-${columnIndex }`" class="matrix-cell unchanged">
                     {{ element }}
                 </div>
             </div>
@@ -44,10 +44,25 @@
                 }else{
                     document.querySelector(`#matrix-${rowIndex}-${columnIndex}`).innerHTML = "tecla"
                 }
+            },
+            getMatrix(){
+                let matrix = [[],[],[],[],[],[],[],[],[]]
+                let matrixElements = document.querySelectorAll(".matrix-cell")
+                let ind = 0;
+
+
+                for(let i = 0; i < 9; i++){
+                    for(let c = 0; c < 9; c++){
+                        if(matrixElements[ind].innerHTML == 0){
+                            throw new Error("Existe um campo vazio")
+                        }
+                        matrix[i][c] = matrixElements[ind].innerHTML;
+                        ind++;
+                    }
+                }
+
+                return matrix;
             }
-        },
-        mounted(){
-            
         }
     }
 </script>
