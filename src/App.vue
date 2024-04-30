@@ -20,7 +20,7 @@
 <script>
   import  inputButton  from "./components/input/button.vue";
   import  timerContent  from "./components/timer.vue";
-  import matrixContent from "./components/miniMatrix.vue";
+  import matrixContent from "./components/Matrix.vue";
 
   export default {
       name: "App",
@@ -29,15 +29,31 @@
         timerContent,
         matrixContent
       },
+      data(){
+        return {
+          complete: false
+        }
+      },
       methods:{
           submitMatrix(event){
             event.preventDefault();
+
             try{
-              console.log(this.$refs.matrixRef.getMatrix());
-            }catch(error){
-              alert(`${error.message}`)
+              const response = fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/submit', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.$refs.matrixRef.getMatrix())
+              });
+
+              if(response) alert("EITA COMO É GENIO")
+            } catch (error) {
+              console.error('Erro ao fazer o POST:', error);
+              // Você pode lidar com erros aqui, se necessário
             }
-          }
+          },
+          
       }
   }
 </script>

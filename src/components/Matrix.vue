@@ -1,10 +1,10 @@
 <template>
     <div id="matrix">
-        <div v-for="(row, rowIndex) in test" :key="rowIndex" class="matrix-row">
+        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="matrix-row">
             <div v-for="(element, columnIndex) in row" :key="columnIndex" class="matrix-element">
                 <div v-if="element == 0">
-                    <input type="text"  @keypress="validKey(rowIndex, columnIndex,$event)" :id="`input-matrix-${rowIndex}-${columnIndex}`">
-                    <div :id="`matrix-${rowIndex}-${columnIndex}`" class="matrix-cell" hidden >0</div>
+                    <input type="text"  @keypress="validKey(rowIndex, columnIndex,$event)" :id="`input-matrix-${rowIndex}-${columnIndex}`" autocomplete="off">
+                    <div :id="`matrix-${rowIndex}-${columnIndex}`" class="matrix-cell" hidden >1</div>
                 </div>
                 <div v-else :id="`matrix-${rowIndex}-${columnIndex }`" class="matrix-cell unchanged">
                     {{ element }}
@@ -30,8 +30,25 @@
                     [ 8, 0, 1, 5, 0, 0, 0, 0, 0 ],
                     [ 0, 2, 2, 4, 0, 2, 0, 0, 1 ],
                     [ 6, 0, 1, 6, 5, 8, 5, 1, 0 ]
-                ]
+                ],
+                grid: []
+
             }
+        },
+        created() {
+            fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/today')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Não foi possível obter os dados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.grid = data.grid;
+            })
+            .catch(error => {
+                console.error('Erro ao obter os dados:', error);
+            });
         },
         methods:{
             validKey(rowIndex, columnIndex ,event){
@@ -42,11 +59,12 @@
                 if ((isNaN(tecla) || tecla < '1' || tecla > '9')) {
                     event.preventDefault();
                 }else{
-                    document.querySelector(`#matrix-${rowIndex}-${columnIndex}`).innerHTML = "tecla"
+                    document.querySelector(`#matrix-${rowIndex}-${columnIndex}`).innerHTML = tecla
                 }
             },
             getMatrix(){
-                let matrix = [[],[],[],[],[],[],[],[],[]]
+                let matrix = {grid: [[],[],[],[],[],[],[],[],[]]}
+
                 let matrixElements = document.querySelectorAll(".matrix-cell")
                 let ind = 0;
 
@@ -56,12 +74,10 @@
                         if(matrixElements[ind].innerHTML == 0){
                             throw new Error("Existe um campo vazio")
                         }
-                        matrix[i][c] = matrixElements[ind].innerHTML;
+                        matrix.grid[i][c] = parseInt(matrixElements[ind].innerHTML);
                         ind++;
                     }
-                }
-
-                return matrix;
+                } 
             }
         }
     }
