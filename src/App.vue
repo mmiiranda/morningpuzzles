@@ -50,7 +50,6 @@
               if(response) alert("EITA COMO É GENIO")
             } catch (error) {
               console.error('Erro ao fazer o POST:', error);
-              // Você pode lidar com erros aqui, se necessário
             }
           },
           
