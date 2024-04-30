@@ -31,7 +31,8 @@
       },
       data(){
         return {
-          complete: false
+          complete: false,
+          isCorrect: false
         }
       },
       methods:{
@@ -39,17 +40,24 @@
             event.preventDefault();
 
             try{
-              const response = fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/submit', {
+              let submitMatrix = this.$refs.matrixRef.getMatrix()
+
+              fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/submit', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.$refs.matrixRef.getMatrix())
-              });
+                body: JSON.stringify(submitMatrix)
+              }).then(res => res.json())
+                .then(data =>{
+                  if(data.isCorrect) alert("EITA COMO É GENIO")
+                  else alert("WRONG ANSWER")
+                }).catch(error => {
+                  console.error('Erro na requisição fetch:', error);
+              })
 
-              if(response) alert("EITA COMO É GENIO")
-            } catch (error) {
-              console.error('Erro ao fazer o POST:', error);
+            } catch(error){
+                alert(`${error.message}`)
             }
           },
           
