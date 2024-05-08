@@ -1,5 +1,4 @@
 # morningpuzzles
-Front End
 
 ## Project setup
 ```
