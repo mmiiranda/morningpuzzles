@@ -20,6 +20,12 @@
     padding: .5rem 1.25rem;
 
     border-radius: .75rem;
+
+    transition: all .2s ease-in;
+}
+
+.card-game:hover{
+    transform: translateY(-.5rem);
 }
 
 .router-link{

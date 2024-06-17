@@ -2,7 +2,7 @@
         <div class="container">
           <form @submit="submitMatrix">
             <div class="logo">
-              <h1>MornigPuzzle</h1>
+              <h1>MorningPuzzle</h1>
             </div>
           
             <matrixContent ref="matrixRef"/>
@@ -13,11 +13,13 @@
           </form>
         </div>
         <timerContent/>
+        <modalResult ref="modalResultRef"/>
   </template>
   
   <script>
     import  inputButton  from "../components/input/button.vue";
     import  timerContent  from "../components/timer.vue";
+    import modalResult from "../components/modal/modalResult"
     import matrixContent from "../components/matrix/Matrix.vue";
   
     export default {
@@ -25,6 +27,7 @@
         components: {
           inputButton,
           timerContent,
+          modalResult,
           matrixContent
         },
         data(){
@@ -40,7 +43,7 @@
               try{
                 let submitMatrix = this.$refs.matrixRef.getMatrix()
   
-                fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/submit', {
+                 fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/submit', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
@@ -48,8 +51,10 @@
                   body: JSON.stringify(submitMatrix)
                 }).then(res => res.json())
                   .then(data =>{
-                    if(data.isCorrect) alert("EITA COMO É GENIO")
-                    else alert("WRONG ANSWER")
+                    if(data.isCorrect){
+                      this.$refs.modalResultRef.toogleModal()
+                    } 
+                    else this.$refs.matrixRef.errorMatrix()
                   }).catch(error => {
                     console.error('Erro na requisição fetch:', error);
                 })

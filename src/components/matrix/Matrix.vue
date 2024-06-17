@@ -1,5 +1,10 @@
 <template>
     <div id="matrix">
+        <div v-if="loading">
+            <div class="loader">
+
+            </div>
+        </div>
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="matrix-row">
             <div v-for="(element, columnIndex) in row" :key="columnIndex" class="matrix-element">
                 <div v-if="element == 0">
@@ -19,24 +24,24 @@
         name: "matrixContent",
         data(){
             return{
-                grid: []
-
+                grid: [],
+                loading: true
             }
         },
-        created() {
-            fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/today')
-            .then(response => {
+        async created() {
+            try {
+                let response = await fetch('https://morningpuzzlesapi.onrender.com/api/sudoku/today');
                 if (!response.ok) {
-                throw new Error('Não foi possível obter os dados');
+                    throw new Error('Não foi possível obter os dados');
                 }
-                return response.json();
-            })
-            .then(data => {
+                let data = await response.json();
                 this.grid = data.grid;
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Erro ao obter os dados:', error);
-            });
+            }
+            finally{
+                this.loading = false
+            }
         },
         methods:{
             validKey(rowIndex, columnIndex ,event){
@@ -67,6 +72,16 @@
                     } 
 
                     return matrix;
+            },
+            errorMatrix(){
+                let matrix = document.querySelector("#matrix")
+
+                matrix.classList.add("error");
+
+                setTimeout(()=>{
+                    matrix.classList.remove("error");
+                }, 200)
+
             }
         }
     }
@@ -74,8 +89,31 @@
 
 <style >
 #matrix{
+    --border-color: #000000;
+    --txt-color: #000000;
+
     display: flex;
     flex-direction: column;
+
+    color: var(--txt-color);
+
+}
+
+#matrix.error{
+    --border-color: #db0303;
+    --txt-color: #960303;
+}
+
+.error{
+    animation: error .2s forwards;
+}
+
+@keyframes error{
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); --border-color: #910000;}
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
 }
 
 #matrix input{
@@ -93,7 +131,7 @@
 }
 
 .matrix-row:nth-child(3n){
-    border-bottom: 5px solid #000000;   
+    border-bottom: 5px solid var(--border-color);   
 }
 
 .matrix-row:last-child{
@@ -118,7 +156,7 @@
 }
 
 .matrix-element:nth-child(3n){
-    border-right: 5px solid #000000;
+    border-right: 5px solid var(--border-color);
 }
 
 .matrix-element:first-child{
@@ -132,5 +170,22 @@
 .matrix-element .unchanged{
     background-color: #c1c1c1;
     cursor: context-menu;
+}
+
+.loader{
+    width: 7.5rem;
+    height: 7.5rem;
+
+    border: .75rem solid #9e9e9e;
+    border-bottom-color: #000;
+    border-radius: 100%;
+
+    animation: loading .5s infinite;
+}
+
+@keyframes loading {
+    to{
+        transform: rotate(360deg);
+    }
 }
 </style>

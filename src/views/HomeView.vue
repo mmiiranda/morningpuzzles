@@ -3,24 +3,18 @@
         <div class="logo">
             <h1>MorningPuzzles</h1>
         </div>
-        <div class="card-game-content">
-            <cardGame v-for="name in games" :key=name :name="name" />
-        </div>
+        <cardGamesMenu />
     </div>
+
 </template>
 
 <script>
-import cardGame from "../components/home/cardGame.vue"
+import cardGamesMenu from "@/components/cards/card-games-menu"
 
 export default{
     name: "HomeView",
-    data(){
-        return{
-            games: ["sudoku", "forca"]
-        }
-    },
     components: {
-        cardGame
+        cardGamesMenu
     }
 }
 </script>
@@ -29,11 +23,5 @@ export default{
 .home.container{
     justify-content: space-evenly;
     align-items: center ;
-}
-
-.card-game-content{
-    display: flex;
-
-    gap: 1rem;
 }
 </style>
